@@ -1,0 +1,157 @@
+<div class="main">
+    <div class="app-block">
+
+        <div class="top">
+            <p class="info-title">Employee Table</p>
+            <div class="app-filters">
+                <button (click)="openModal()">Add Employee</button>
+            </div>
+        </div>
+
+        <p-table [resizableColumns]="true" columnResizeMode="expand" [columns]="cols" scrollWidth="100%"
+            [value]="employees" [scrollable]="true" class="customertable"
+            styleClass="customertable custom-dataTable table-striped"
+            currentPageReportTemplate="Showing {first} - {last} of {totalRecords}">
+
+
+
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+
+
+                    <th *ngFor="let col of columns">
+                        {{col.header}}
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+                <tr [pSelectableRow]="rowData" class="pointer">
+
+                    <td *ngFor="let col of columns">
+
+                        <span *ngIf="col.field === 'action' else contentCols" class="d-flex align-items-center">
+
+
+
+                            <svg (click)="getDataById(rowData.id)" class="edit" width="13.197" height="13.197"
+                                viewBox="0 0 13.197 13.197">
+                                <g transform="translate(0 -0.004)">
+                                    <g transform="translate(0 0.946)">
+                                        <path
+                                            d="M10.84,39.793a.471.471,0,0,0-.471.471v4.713a.471.471,0,0,1-.471.471H1.414a.471.471,0,0,1-.471-.471V35.551a.471.471,0,0,1,.471-.471H7.07a.471.471,0,1,0,0-.943H1.414A1.414,1.414,0,0,0,0,35.551v9.426a1.414,1.414,0,0,0,1.414,1.414H9.9a1.414,1.414,0,0,0,1.414-1.414V40.264A.471.471,0,0,0,10.84,39.793Z"
+                                            transform="translate(0 -34.137)" />
+                                    </g>
+                                    <g transform="translate(2.828 0.004)">
+                                        <g transform="translate(0 0)">
+                                            <path
+                                                d="M112.249.532a1.8,1.8,0,0,0-2.552,0L103.489,6.74a.476.476,0,0,0-.114.184l-.943,2.828a.471.471,0,0,0,.447.62.479.479,0,0,0,.149-.024l2.828-.943a.471.471,0,0,0,.184-.114l6.208-6.208A1.8,1.8,0,0,0,112.249.532Zm-.667,1.886-6.127,6.127-1.831.611.609-1.828L110.364,1.2a.861.861,0,1,1,1.219,1.217Z"
+                                                transform="translate(-102.409 -0.004)" />
+                                        </g>
+                                    </g>
+                                </g>
+                            </svg>
+
+                            <svg (click)="selectedData=rowData;deleteModal=true" class="delete" width="13.068"
+                                height="14" viewBox="0 0 13.068 14">
+                                <path
+                                    d="M18.812,2.035H15.271V0H9.285V2.035H5.744V3.252h1.2L7.757,14H16.8l.811-10.748h1.2V2.035ZM10.5,1.217h3.551v.818H10.5Zm5.168,11.566H8.885l-.72-9.531H16.39Z"
+                                    transform="translate(-5.744)" />
+                                <rect width="0.974" height="5.374" transform="translate(6.047 5.33)" />
+                                <rect width="0.974" height="5.374" transform="translate(4.181 5.33)" />
+                                <rect width="0.974" height="5.374" transform="translate(7.913 5.33)" />
+                            </svg>
+
+                        </span>
+                        <ng-template #contentCols>
+
+                            <span>
+                                {{rowData[col.field]}}
+                            </span>
+
+                        </ng-template>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="9">
+                        No Employee found.
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+        <div class="d-flex justify-content-between align-items-center custom_paginator paginator-top w-100">
+
+            <p-paginator class="custom_paginator" [rows]="10" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} - {last} of {totalRecords}"
+                (onPageChange)="loadEmployees($event)" [rowsPerPageOptions]="[10,20,50,75,100]" [pageLinkSize]="3"
+                [totalRecords]="totalRecords"></p-paginator>
+
+        </div>
+
+    </div>
+</div>
+<p-dialog class="insta-dialog" *ngIf="editModal" header="Add Customer" [(visible)]="editModal" [modal]="true"
+    [draggable]="false" [style]="{width: '40vw'}" [resizable]="false">
+
+    <form #connectForm="ngForm" (ngSubmit)="addCustomer(connectForm)">
+        <div style="min-height: 250px;">
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" class="form-control" [(ngModel)]="employeeData.first_name" name="first_name" required
+                    appWhiteSpaceValidator #first_name="ngModel">
+                <ng-container *ngIf="first_name.errors && (isSubmitted)">
+                    <p class="error" [hidden]="!first_name.errors['required']">
+                        Please enter first name</p>
+                </ng-container>
+            </div>
+
+            <div style="margin-top: 15px;" class="form-group">
+                <label>Job</label>
+                <input type="text" class="form-control" [(ngModel)]="employeeData.last_name" name="last_name" required
+                    appWhiteSpaceValidator #last_name="ngModel">
+                <ng-container *ngIf="last_name.errors && (isSubmitted)">
+                    <p class="error" [hidden]="!last_name.errors['required']">
+                        Please enter last name</p>
+                </ng-container>
+            </div>
+
+            <div style="margin-top: 15px;" class="form-group">
+                <label>Email</label>
+                <input type="text" class="form-control" [(ngModel)]="employeeData.email" name="email" required
+                    appWhiteSpaceValidator #email="ngModel">
+                <ng-container *ngIf="email.errors && (isSubmitted)">
+                    <p class="error" [hidden]="!email.errors['required']">
+                        Please enter email</p>
+                </ng-container>
+            </div>
+
+
+
+        </div>
+
+        <div class="class-footer app-filters">
+            <button type="submit" class="btn btn-white mr-10">Add</button>
+            <button type="button" class="btn btn-white" (click)="editModal = false;id=null;">
+                Cancel</button>
+        </div>
+
+    </form>
+</p-dialog>
+
+
+<p-dialog class="insta-dialog" *ngIf="deleteModal" header="Delete Customer" [(visible)]="deleteModal" [modal]="true"
+    [draggable]="false" [style]="{width: '40vw'}" [resizable]="false">
+
+    <div style="margin-bottom:15px">
+        Are you sure, you want to delete employee? This cannot be undone.
+    </div>
+
+    <div class="class-footer app-filters">
+        <button type="button" (click)="deleteEmployee(selectedData.id)" class="btn btn-white mr-10">Yes, Delete</button>
+        <button type="button" class="btn btn-white" (click)="deleteModal = false;selectedData = null">
+            Cancel</button>
+    </div>
+
+</p-dialog>

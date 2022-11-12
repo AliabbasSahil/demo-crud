@@ -1,1 +1,66 @@
 /* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+    height: 100%;
+    background-color: #E4E4E4;
+}
+
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Soho Gothic W04 Regular", sans-serif !important;
+}
+
+.p-toast-message-icon {
+    display: none;
+}
+
+.p-toast {
+    width: 300px !important;
+}
+
+.p-toast-message {
+    border-radius: 5px !important;
+    padding: 5px 10px;
+    border: 1px solid !important;
+    border-top: 3px solid !important;
+}
+
+.p-toast-message-success {
+    color: #588337 !important;
+    background-color: #dcfbc5 !important;
+    border-color: #588337 !important;
+}
+
+.p-toast-message-error {
+    color: #96091C !important;
+    background-color: #FFE6EA !important;
+    border-color: #96091C !important;
+}
+
+.p-toast-message-error .p-toast-icon-close {
+    color: #96091C;
+}
+
+
+.p-toast-message-info .p-toast-icon-close {
+    color: #cc8925;
+}
+
+.p-toast-message-info {
+    color: #cc8925 !important;
+    background-color: #FFE6EA !important;
+    border-color: #cc8925 !important;
+}
+
+.p-toast-message-info .p-toast-icon-close {
+    color: #cc8925;
+}
+
+.p-toast .p-toast-message .p-toast-message-content .p-toast-message-text {
+    margin: 0px;
+}
